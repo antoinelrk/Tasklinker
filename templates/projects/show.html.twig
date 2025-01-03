@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}[PROJECT_NAME]{% endblock %}
+{% block title %}{{ project.name }}{% endblock %}
 
 {% block body %}
 <main>
@@ -8,15 +8,18 @@
         <div id="current-user"></div>
         <div id="title-page">
             <div class="flex-header">
-                <h1>Nom du projet</h1>
+                <h1>{{ project.name }}</h1>
                 <div class="user-list">
                     <div class="avatar">ND</div>
                     <div class="avatar">DB</div>
                 </div>
-                <a class="button" href="projet-edit.html">Modifier</a>
+                <a class="button" href="">
+                    Modifier
+                </a>
             </div>
         </div>
     </header>
+
     <div id="content">
         <div id="tasks-container">
             <div class="task-column">
