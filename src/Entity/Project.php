@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ProjectRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -22,7 +23,7 @@ class Project
     private ?\DateTimeImmutable $likely_end_at = null;
 
     #[ORM\Column]
-    private ?bool $archived = null;
+    private ?bool $archived = false;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $started_at = null;
@@ -31,7 +32,7 @@ class Project
     private ?\DateTimeImmutable $ended_at = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
+    private ?\DateTimeImmutable $created_at;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updated_at = null;
@@ -46,6 +47,7 @@ class Project
     {
         $this->project = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->created_at = new \DateTimeImmutable('now');
     }
 
     public function getId(): ?int

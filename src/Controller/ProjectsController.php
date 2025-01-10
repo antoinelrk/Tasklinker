@@ -3,9 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Project;
+use App\Form\ProjectType;
 use App\Repository\ProjectRepository;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -29,10 +32,26 @@ class ProjectsController extends AbstractController
     }
 
     #[Route('/projects/create', name: 'projects.create')]
-    public function create(UserRepository $userRepository): Response
-    {
+    public function create(
+        UserRepository $userRepository,
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $project = new Project();
+        $form = $this->createForm(ProjectType::class, $project);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($project);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('projects.show', ['id' => $project->getId()]);
+        }
+
         return $this->render('projects/create.html.twig', [
             'users' => $userRepository->findAll(),
+            'form' => $form,
         ]);
     }
 
