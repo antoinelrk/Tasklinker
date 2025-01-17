@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
-class Project
+class Project extends Entity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -45,7 +45,6 @@ class Project
 
     public function __construct()
     {
-        $this->project = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->created_at = new \DateTimeImmutable('now');
     }

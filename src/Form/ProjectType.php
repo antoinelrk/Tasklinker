@@ -23,6 +23,7 @@ class ProjectType extends AbstractType
                 'class' => User::class,
                 'choice_label' => fn($user) => $user->getFirstName() . ' ' . $user->getName(),
                 'multiple' => true,
+                'by_reference' => false,
             ])
         ;
     }

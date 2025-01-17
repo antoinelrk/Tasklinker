@@ -9,10 +9,13 @@
         <div id="title-page">
             <div class="flex-header">
                 <h1>{{ project.name }}</h1>
+
                 <div class="user-list">
-                    <div class="avatar">ND</div>
-                    <div class="avatar">DB</div>
+                    {% for user in project.getUsers() %}
+                    <div class="avatar">{{ user.getInitials() }}</div>
+                    {% endfor %}
                 </div>
+
                 <a class="button" href="">
                     Modifier
                 </a>

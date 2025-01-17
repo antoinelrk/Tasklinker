@@ -28,6 +28,15 @@
             <br>
             <button class="button button-submit">Modifier</button>
         </form>
+        {{ form_start(form) }}
+        <div>{{ form_errors(form) }}</div>
+
+        <div>{{ form_row(form.name) }}</div>
+
+        <div>{{ form_row(form.users) }}</div>
+
+        <button class="button button-submit">Continuer</button>
+        {{ form_end(form) }}
     </div>
 </main>
 {% endblock %}
