@@ -93,10 +93,27 @@ class ProjectsController extends AbstractController
      * @return Response
      */
     #[Route('/projects/edit/{id}', name: 'projects.edit')]
-    public function edit(Project $project): Response
+    public function edit(
+        Request $request,
+        Project $project,
+        EntityManagerInterface $entityManager,
+    ): Response
     {
+        $form = $this->createForm(ProjectType::class, $project);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Projet modifié avec succès !');
+
+            return $this->redirectToRoute('projects.show', ['id' => $project->getId()]);
+        }
+
         return $this->render('projects/edit.html.twig', [
             'project' => $project,
+            'form' => $form,
         ]);
     }
 
