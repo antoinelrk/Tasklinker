@@ -8,7 +8,6 @@ use App\Entity\User;
 use App\Enum\EmploymentContractEnum;
 use App\Enum\TaskStateEnum;
 use App\Repository\ProjectRepository;
-use App\Repository\TaskRepository;
 use App\Repository\UserRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -16,7 +15,6 @@ use Doctrine\Persistence\ObjectManager;
 class AppFixtures extends Fixture
 {
     public function __construct(
-        protected TaskRepository $taskRepository,
         protected ProjectRepository $projectRepository,
         protected UserRepository $userRepository,
     ) {}
@@ -61,18 +59,6 @@ class AppFixtures extends Fixture
         }
     }
 
-    private function tasks(ObjectManager $manager): void
-    {
-        $task = new Task();
-        $task->setTitle( 'Gestion des droits d\'accès');
-        $task->setBody('Un employé ne peut accéder qu\'à ses projets');
-        $task->setState(TaskStateEnum::TODO->value);
-        $task->setProject($this->projectRepository->first());
-        $task->setCreatedAt(new \DateTimeImmutable());
-
-        $this->flush($manager, $task);
-    }
-
     private function projects(ObjectManager $manager): void
     {
         $project = new Project();
@@ -89,6 +75,19 @@ class AppFixtures extends Fixture
         $project->setCreatedAt(new \DateTimeImmutable());
 
         $this->flush($manager, $project);
+    }
+
+    private function tasks(ObjectManager $manager): void
+    {
+        $task = new Task();
+        $task->setTitle("Gestion des droits d'accès");
+        $task->setBody("Un employé ne peut accéder qu'à ses projets");
+        $task->setState(TaskStateEnum::TODO->value);
+        $task->setLikelyEndAt(new \DateTimeImmutable('2023-09-22'));
+        $task->setProject($this->projectRepository->first());
+        $task->setCreatedAt(new \DateTimeImmutable('now'));
+
+        $this->flush($manager, $task);
     }
 
     public function load(ObjectManager $manager): void

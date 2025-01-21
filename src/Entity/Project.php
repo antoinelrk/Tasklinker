@@ -43,10 +43,17 @@ class Project extends Entity
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'project', fetch: 'EAGER')]
     private Collection $users;
 
+    /**
+     * @var Collection<int, Task>
+     */
+    #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'project', fetch: 'EAGER')]
+    private Collection $tasks;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->created_at = new \DateTimeImmutable('now');
+        $this->tasks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -160,6 +167,36 @@ class Project extends Entity
     {
         if ($this->users->removeElement($user)) {
             $user->removeProject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Task>
+     */
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
+    public function addTask(Task $task): static
+    {
+        if (!$this->tasks->contains($task)) {
+            $this->tasks->add($task);
+            $task->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTask(Task $task): static
+    {
+        if ($this->tasks->removeElement($task)) {
+            // set the owning side to null (unless already changed)
+            if ($task->getProject() === $this) {
+                $task->setProject(null);
+            }
         }
 
         return $this;

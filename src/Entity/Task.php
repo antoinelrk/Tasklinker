@@ -7,7 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
-class Task extends Entity
+class Task
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -20,10 +20,7 @@ class Task extends Entity
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $body = null;
 
-    #[ORM\ManyToOne(inversedBy: 'project')]
-    private ?Project $project = null;
-
-    #[ORM\Column(length: 16)]
+    #[ORM\Column(length: 255)]
     private ?string $state = null;
 
     #[ORM\Column(nullable: true)]
@@ -34,6 +31,9 @@ class Task extends Entity
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updated_at = null;
+
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    private ?Project $project = null;
 
     public function getId(): ?int
     {
@@ -60,18 +60,6 @@ class Task extends Entity
     public function setBody(?string $body): static
     {
         $this->body = $body;
-
-        return $this;
-    }
-
-    public function getProject(): ?Project
-    {
-        return $this->project;
-    }
-
-    public function setProject(?Project $project): static
-    {
-        $this->project = $project;
 
         return $this;
     }
@@ -120,6 +108,18 @@ class Task extends Entity
     public function setUpdatedAt(?\DateTimeImmutable $updated_at): static
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): static
+    {
+        $this->project = $project;
 
         return $this;
     }

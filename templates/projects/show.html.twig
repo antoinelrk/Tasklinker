@@ -16,7 +16,10 @@
                     {% endfor %}
                 </div>
 
-                <a class="button" href="">
+                <a
+                    class="button"
+                    href="{{ url('projects.edit', { id: project.id }) }}"
+                >
                     Modifier
                 </a>
             </div>
@@ -28,15 +31,20 @@
             <div class="task-column">
                 <h2>To Do</h2>
                 <div class="tasks-list">
-                    <a class="task" href="tache.html">
-                        <h3>Gestion des droits d&#039;accès</h3>
-                        <p>Un employé ne peut accéder qu&#039;à ses projets</p>
-                        <div class="task-infos">
-                            <div class="task-deadline">
-                                <i class="fa-regular fa-calendar"></i> 22/09/2023
-                            </div>
-                        </div>
-                    </a>
+                    {% for task in project.getTasks() %}
+                        {% if task.getState() is same as('TODO') %}
+                            <a class="task" href="tache.html">
+                                <h3>{{ task.getTitle() }}</h3>
+                                <p>Un employé ne peut accéder qu&#039;à ses projets</p>
+                                <div class="task-infos">
+                                    <div class="task-deadline">
+                                        <i class="fa-regular fa-calendar"></i> 22/09/2023
+                                    </div>
+                                </div>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+
                     <a href="tache-add.html" class="task-add">
                         + Ajouter une tâche
                     </a>

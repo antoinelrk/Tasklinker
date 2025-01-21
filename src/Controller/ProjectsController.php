@@ -20,6 +20,41 @@ class ProjectsController extends AbstractController
     ) {}
 
     /**
+     * Create new project
+     *
+     * @param Request $request
+     * @param UserRepository $userRepository
+     * @param EntityManagerInterface $entityManager
+     *
+     * @return Response
+     */
+    #[Route('/projects/create', name: 'projects.create')]
+    public function create(
+        Request $request,
+        UserRepository $userRepository,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $project = new Project();
+        $form = $this->createForm(ProjectType::class, $project);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($project);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Projet créé avec succès !');
+
+            return $this->redirectToRoute('projects.show', ['id' => $project->getId()]);
+        }
+
+        return $this->render('projects/create.html.twig', [
+            'users' => $userRepository->findAll(),
+            'form' => $form,
+        ]);
+    }
+
+    /**
      * List projects
      *
      * @param ProjectRepository $projectRepository
@@ -44,51 +79,17 @@ class ProjectsController extends AbstractController
     #[Route('/projects/show/{id}', name: 'projects.show')]
     public function show(Project $project): Response
     {
-        dump($project);
         return $this->render('projects/show.html.twig', [
             'project' => $project,
         ]);
     }
 
     /**
-     * Create new project
-     *
-     * @param UserRepository $userRepository
-     * @param Request $request
-     * @param EntityManagerInterface $entityManager
-     *
-     * @return Response
-     */
-    #[Route('/projects/create', name: 'projects.create')]
-    public function create(
-        UserRepository $userRepository,
-        Request $request,
-        EntityManagerInterface $entityManager
-    ): Response {
-        $project = new Project();
-        $form = $this->createForm(ProjectType::class, $project);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($project);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Projet créé avec succès !');
-
-            return $this->redirectToRoute('projects.show', ['id' => $project->getId()]);
-        }
-
-        return $this->render('projects/create.html.twig', [
-            'users' => $userRepository->findAll(),
-            'form' => $form,
-        ]);
-    }
-
-    /**
      * Show edition form
      *
+     * @param Request $request
      * @param Project $project
+     * @param EntityManagerInterface $entityManager
      *
      * @return Response
      */
