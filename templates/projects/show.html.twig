@@ -33,19 +33,19 @@
                 <div class="tasks-list">
                     {% for task in project.getTasks() %}
                         {% if task.getState() is same as('TODO') %}
-                            <a class="task" href="tache.html">
+                            <a class="task" href="{{ url('tasks.show', { id: task.id }) }}">
                                 <h3>{{ task.getTitle() }}</h3>
-                                <p>Un employé ne peut accéder qu&#039;à ses projets</p>
+                                <p>{{ task.getBody() }}</p>
                                 <div class="task-infos">
                                     <div class="task-deadline">
-                                        <i class="fa-regular fa-calendar"></i> 22/09/2023
+                                        <i class="fa-regular fa-calendar"></i> {{ task.getLikelyEndAt().format('d/m/Y') }}
                                     </div>
                                 </div>
                             </a>
                         {% endif %}
                     {% endfor %}
 
-                    <a href="tache-add.html" class="task-add">
+                    <a href="{{ url('tasks.create', { project: project.id, list: 'TODO' }) }}" class="task-add">
                         + Ajouter une tâche
                     </a>
                 </div>
