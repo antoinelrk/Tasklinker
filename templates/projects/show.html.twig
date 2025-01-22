@@ -40,12 +40,15 @@
                                     <div class="task-deadline">
                                         <i class="fa-regular fa-calendar"></i> {{ task.getLikelyEndAt().format('d/m/Y') }}
                                     </div>
+                                    <div class="mini-user">
+                                        {{ task.user.getInitials() }}
+                                    </div>
                                 </div>
                             </a>
                         {% endif %}
                     {% endfor %}
 
-                    <a href="{{ url('tasks.create', { project: project.id, list: 'TODO' }) }}" class="task-add">
+                    <a href="{{ url('tasks.create', { project: project.id, state: 'TODO' }) }}" class="task-add">
                         + Ajouter une tâche
                     </a>
                 </div>
@@ -65,7 +68,7 @@
                             </div>
                         </div>
                     </a>
-                    <a href="tache-add.html" class="task-add">
+                    <a href="{{ url('tasks.create', { project: project.id, state: 'DOING' }) }}" class="task-add">
                         + Ajouter une tâche
                     </a>
                 </div>
@@ -94,7 +97,7 @@
                             </div>
                         </div>
                     </a>
-                    <a href="tache-add.html" class="task-add">
+                    <a href="{{ url('tasks.create', { project: project.id, state: 'DONE' }) }}" class="task-add">
                         + Ajouter une tâche
                     </a>
                 </div>
