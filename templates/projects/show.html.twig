@@ -58,18 +58,25 @@
             <div class="task-column">
                 <h2>Doing</h2>
                 <div class="tasks-list">
-                    <a class="task" href="tache.html">
-                        <h3>Développement de la page employé</h3>
-                        <p>Page employé avec liste des employés, édition, modification, suppression et création des employés</p>
-                        <div class="task-infos">
-                            <div class="task-deadline">
-                                <i class="fa-regular fa-calendar"></i> 14/09/2023
-                            </div>
-                            <div class="mini-user">
-                                DB
-                            </div>
-                        </div>
-                    </a>
+                    {% for task in project.getTasks() %}
+                        {% if task.getState() is same as('DOING') %}
+                            <a class="task" href="{{ url('tasks.show', { id: task.id }) }}">
+                                <h3>{{ task.getTitle() }}</h3>
+                                <p>{{ task.getBody() }}</p>
+                                <div class="task-infos">
+                                    <div class="task-deadline">
+                                        <i class="fa-regular fa-calendar"></i> {{ task.getLikelyEndAt().format('d/m/Y') }}
+                                    </div>
+                                    {% if task.getUser() %}
+                                        <div class="mini-user">
+                                            {{ task.getUser().getInitials() }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+
                     <a href="{{ url('tasks.create', { project: project.id, state: 'DOING' }) }}" class="task-add">
                         + Ajouter une tâche
                     </a>
@@ -78,27 +85,25 @@
             <div class="task-column">
                 <h2>Done</h2>
                 <div class="tasks-list">
-                    <a class="task" href="tache.html">
-                        <h3>Développement de la structure globale</h3>
-                        <p>Intégrer les maquettes</p>
-                        <div class="task-infos">
-                            <div class="task-deadline">
-                                <i class="fa-regular fa-calendar"></i> 03/09/2023
-                            </div>
-                            <div class="mini-user">
-                                DB
-                            </div>
-                        </div>
-                    </a>
-                    <a class="task" href="tache.html">
-                        <h3>Développement de la page projet</h3>
-                        <p>Page projet avec liste des tâches, édition, modification, suppression et création des tâches</p>
-                        <div class="task-infos">
-                            <div class="mini-user">
-                                ND
-                            </div>
-                        </div>
-                    </a>
+                    {% for task in project.getTasks() %}
+                        {% if task.getState() is same as('DONE') %}
+                            <a class="task" href="{{ url('tasks.show', { id: task.id }) }}">
+                                <h3>{{ task.getTitle() }}</h3>
+                                <p>{{ task.getBody() }}</p>
+                                <div class="task-infos">
+                                    <div class="task-deadline">
+                                        <i class="fa-regular fa-calendar"></i> {{ task.getLikelyEndAt().format('d/m/Y') }}
+                                    </div>
+                                    {% if task.getUser() %}
+                                        <div class="mini-user">
+                                            {{ task.getUser().getInitials() }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+
                     <a href="{{ url('tasks.create', { project: project.id, state: 'DONE' }) }}" class="task-add">
                         + Ajouter une tâche
                     </a>

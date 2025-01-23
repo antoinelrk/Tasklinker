@@ -9,6 +9,7 @@ use App\Enum\TaskStateEnum;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -27,7 +28,7 @@ class TaskType extends AbstractType
                 ],
                 'data' => $options['default_state']
             ]) // Select
-            ->add('likely_end_at', null, [
+            ->add('likely_end_at', DateType::class, [
                 'widget' => 'single_text'
             ])
             ->add('User', EntityType::class, [
