@@ -40,9 +40,11 @@
                                     <div class="task-deadline">
                                         <i class="fa-regular fa-calendar"></i> {{ task.getLikelyEndAt().format('d/m/Y') }}
                                     </div>
-                                    <div class="mini-user">
-                                        {{ task.user.getInitials() }}
-                                    </div>
+                                    {% if task.getUser() %}
+                                        <div class="mini-user">
+                                            {{ task.getUser().getInitials() }}
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </a>
                         {% endif %}

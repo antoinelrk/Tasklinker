@@ -86,6 +86,7 @@ class AppFixtures extends Fixture
         $task->setLikelyEndAt(new \DateTimeImmutable('2023-09-22'));
         $task->setProject($this->projectRepository->first());
         $task->setCreatedAt(new \DateTimeImmutable('now'));
+        $task->setUser($this->userRepository->first());
 
         $this->flush($manager, $task);
     }
