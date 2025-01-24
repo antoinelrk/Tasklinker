@@ -19,11 +19,11 @@
                             <h2>{{ project.name }}</h2>
                         </a>
                         <div class="card-project-icons">
-                            <a href="{{ url('projects.edit', { id: project.id }) }}">
+                            <a href="{{ url('projects.edit', { project: project.id }) }}">
                                 <i class="fa-solid fa-pen"></i>
                             </a>
 
-                            <a href="{{ url('projects.delete', { id: project.id }) }}">
+                            <a href="{{ url('projects.delete', { project: project.id }) }}">
                                 <i class="fa-solid fa-trash"></i>
                             </a>
                         </div>

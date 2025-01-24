@@ -93,7 +93,7 @@ class ProjectsController extends AbstractController
      *
      * @return Response
      */
-    #[Route('/projects/edit/{id}', name: 'projects.edit')]
+    #[Route('/projects/edit/{project}', name: 'projects.edit')]
     public function edit(
         Request $request,
         Project $project,
@@ -125,7 +125,7 @@ class ProjectsController extends AbstractController
      *
      * @return Response
      */
-    #[Route('/projects/delete/{id}', name: 'projects.delete')]
+    #[Route('/projects/delete/{project}', name: 'projects.delete')]
     public function delete(Project $project): Response
     {
         if ($this->projectService->delete($project)) {

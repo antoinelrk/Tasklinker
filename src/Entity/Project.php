@@ -46,7 +46,7 @@ class Project extends Entity
     /**
      * @var Collection<int, Task>
      */
-    #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'project', fetch: 'EAGER')]
+    #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'project', cascade: ['remove'], fetch: 'EAGER', orphanRemoval: true)]
     private Collection $tasks;
 
     public function __construct()
