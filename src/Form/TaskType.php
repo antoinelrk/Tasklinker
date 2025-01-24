@@ -22,9 +22,9 @@ class TaskType extends AbstractType
             ->add('body')
             ->add('state', ChoiceType::class, [
                 'choices' => [
-                    'TODO' => 'TODO',
-                    'DOING' => 'DOING',
-                    'DONE' => 'DONE',
+                     'To Do' => TaskStateEnum::TODO->value,
+                     'Doing' => TaskStateEnum::DOING->value,
+                     'Done' => TaskStateEnum::DONE->value,
                 ],
                 'placeholder' => 'Sélectionnez un statut',
             ]) // Select

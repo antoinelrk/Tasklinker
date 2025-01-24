@@ -129,10 +129,14 @@ class ProjectsController extends AbstractController
     public function delete(Project $project): Response
     {
         if ($this->projectService->delete($project)) {
+            $this->addFlash('success', 'Projet supprimé');
+
             return $this->redirectToRoute('home');
         }
 
         // TODO: Faire une redirection (type: back()) et ajouter un flash message
+        $this->addFlash('error', 'Le projet n\'a pu être supprimé');
+
         return $this->redirectToRoute('home');
     }
 }

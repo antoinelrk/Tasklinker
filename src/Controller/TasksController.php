@@ -7,6 +7,7 @@ use App\Entity\Task;
 use App\Enum\TaskStateEnum;
 use App\Form\TaskType;
 use App\Repository\UserRepository;
+use App\Service\TaskService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,6 +20,7 @@ class TasksController extends AbstractController
 
     public function __construct(
         protected UserRepository $userRepository = new UserRepository(),
+        protected TaskService $taskService = new TaskService(),
     ) {}
 
     #[Route('/tasks/show/{task}', name: 'tasks.show')]
@@ -80,5 +82,23 @@ class TasksController extends AbstractController
             'state' => $state,
             'form' => $form,
         ]);
+    }
+
+    #[Route('/tasks/delete/{task}', name: 'task.delete')]
+    public function delete(
+        Task $task
+    ): Response
+    {
+        $project = $task->getProject();
+
+        if ($this->taskService->delete($task)) {
+            $this->addFlash('success', 'La tâche a bien été supprimée !');
+
+            return $this->redirectToRoute('projects.show', ['id' => $project->getId()]);
+        }
+
+        $this->addFlash('success', 'La tâche n\'a pu être supprimée');
+
+        return $this->redirectToRoute('task.show', ['id' => $task->getId()]);
     }
 }
