@@ -1,0 +1,115 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ project.name }}{% endblock %}
+
+{% block body %}
+<main>
+    <header>
+        <div id="current-user"></div>
+        <div id="title-page">
+            <div class="flex-header">
+                <h1>{{ project.name }}</h1>
+
+                <div class="user-list">
+                    {% for user in project.getUsers() %}
+                    <div class="avatar">{{ user.getInitials() }}</div>
+                    {% endfor %}
+                </div>
+
+                <a
+                    class="button"
+                    href="{{ url('projects.edit', { project: project.id }) }}"
+                >
+                    Modifier
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div id="content">
+        <div id="tasks-container">
+            <div class="task-column">
+                <h2>To Do</h2>
+                <div class="tasks-list">
+                    {% for task in project.getTasks() %}
+                        {% if task.getState() is same as('TODO') %}
+                            <a class="task" href="{{ url('tasks.show', { task: task.id }) }}">
+                                <h3>{{ task.getTitle() }}</h3>
+                                <p>{{ task.getBody() }}</p>
+                                <div class="task-infos">
+                                    <div class="task-deadline">
+                                        <i class="fa-regular fa-calendar"></i> {{ task.getLikelyEndAt().format('d/m/Y') }}
+                                    </div>
+                                    {% if task.getUser() %}
+                                        <div class="mini-user">
+                                            {{ task.getUser().getInitials() }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+
+                    <a href="{{ url('tasks.create', { project: project.id, state: 'TODO' }) }}" class="task-add">
+                        + Ajouter une tâche
+                    </a>
+                </div>
+            </div>
+            <div class="task-column">
+                <h2>Doing</h2>
+                <div class="tasks-list">
+                    {% for task in project.getTasks() %}
+                        {% if task.getState() is same as('DOING') %}
+                            <a class="task" href="{{ url('tasks.show', { task: task.id }) }}">
+                                <h3>{{ task.getTitle() }}</h3>
+                                <p>{{ task.getBody() }}</p>
+                                <div class="task-infos">
+                                    <div class="task-deadline">
+                                        <i class="fa-regular fa-calendar"></i> {{ task.getLikelyEndAt().format('d/m/Y') }}
+                                    </div>
+                                    {% if task.getUser() %}
+                                        <div class="mini-user">
+                                            {{ task.getUser().getInitials() }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+
+                    <a href="{{ url('tasks.create', { project: project.id, state: 'DOING' }) }}" class="task-add">
+                        + Ajouter une tâche
+                    </a>
+                </div>
+            </div>
+            <div class="task-column">
+                <h2>Done</h2>
+                <div class="tasks-list">
+                    {% for task in project.getTasks() %}
+                        {% if task.getState() is same as('DONE') %}
+                            <a class="task" href="{{ url('tasks.show', { task: task.id }) }}">
+                                <h3>{{ task.getTitle() }}</h3>
+                                <p>{{ task.getBody() }}</p>
+                                <div class="task-infos">
+                                    <div class="task-deadline">
+                                        <i class="fa-regular fa-calendar"></i> {{ task.getLikelyEndAt().format('d/m/Y') }}
+                                    </div>
+                                    {% if task.getUser() %}
+                                        <div class="mini-user">
+                                            {{ task.getUser().getInitials() }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+
+                    <a href="{{ url('tasks.create', { project: project.id, state: 'DONE' }) }}" class="task-add">
+                        + Ajouter une tâche
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
