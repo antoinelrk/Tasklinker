@@ -21,13 +21,28 @@ class TasksController extends AbstractController
         protected UserRepository $userRepository = new UserRepository(),
     ) {}
 
-    #[Route('/tasks/show/{id}', name: 'tasks.show')]
-    public function show(Task $task): Response
+    #[Route('/tasks/show/{task}', name: 'tasks.show')]
+    public function show(
+        Task $task,
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): Response
     {
-        $project = $task->getProject();
+        $form = $this->createForm(TaskType::class, $task);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($task);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'La tâche a bien été ajoutée !');
+
+            return $this->redirectToRoute('projects.show', ['id' => $task->getProject()->getId()]);
+        }
 
         return $this->render('tasks/show.html.twig', [
             'task' => $task,
+            'form' => $form,
         ]);
     }
 

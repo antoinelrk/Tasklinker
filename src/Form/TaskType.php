@@ -26,7 +26,7 @@ class TaskType extends AbstractType
                     'DOING' => 'DOING',
                     'DONE' => 'DONE',
                 ],
-                'data' => $options['default_state']
+                'placeholder' => 'Sélectionnez un statut',
             ]) // Select
             ->add('likely_end_at', DateType::class, [
                 'widget' => 'single_text'

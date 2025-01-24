@@ -33,7 +33,7 @@
                 <div class="tasks-list">
                     {% for task in project.getTasks() %}
                         {% if task.getState() is same as('TODO') %}
-                            <a class="task" href="{{ url('tasks.show', { id: task.id }) }}">
+                            <a class="task" href="{{ url('tasks.show', { task: task.id }) }}">
                                 <h3>{{ task.getTitle() }}</h3>
                                 <p>{{ task.getBody() }}</p>
                                 <div class="task-infos">
@@ -60,7 +60,7 @@
                 <div class="tasks-list">
                     {% for task in project.getTasks() %}
                         {% if task.getState() is same as('DOING') %}
-                            <a class="task" href="{{ url('tasks.show', { id: task.id }) }}">
+                            <a class="task" href="{{ url('tasks.show', { task: task.id }) }}">
                                 <h3>{{ task.getTitle() }}</h3>
                                 <p>{{ task.getBody() }}</p>
                                 <div class="task-infos">
@@ -87,7 +87,7 @@
                 <div class="tasks-list">
                     {% for task in project.getTasks() %}
                         {% if task.getState() is same as('DONE') %}
-                            <a class="task" href="{{ url('tasks.show', { id: task.id }) }}">
+                            <a class="task" href="{{ url('tasks.show', { task: task.id }) }}">
                                 <h3>{{ task.getTitle() }}</h3>
                                 <p>{{ task.getBody() }}</p>
                                 <div class="task-infos">
