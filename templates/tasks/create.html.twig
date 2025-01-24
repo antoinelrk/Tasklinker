@@ -20,9 +20,15 @@
 
             <div>{{ form_row(form.state) }}</div>
 
+            <div>{{ form_row(form.likely_end_at) }}</div>
+
+            <div>{{ form_row(form.User) }}</div>
+
+            <button type="submit" class="button button-submit">Continuer</button>
+
             {{ form_end(form) }}
 
-            <button class="button button-submit">Continuer</button>
+
         </div>
     </main>
 {% endblock %}

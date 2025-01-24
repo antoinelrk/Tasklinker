@@ -1,15 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Project name{% endblock %}
+{% block title %}{{ task.getProject().getName() }}{% endblock %}
 
 {% block body %}
 <main>
     <header>
         <div id="current-user"></div>
         <div id="title-page">
-            <h1>Gestion des droits d'accès</h1>
+            <h1>{{ task.getTitle() }}</h1>
         </div>
     </header>
+
     <div id="content">
         <form name="tache" method="post">
             <div><label for="tache_titre" class="required">Titre de la tâche</label><input type="text" id="tache_titre" name="tache[titre]" required="required" value="Gestion des droits d&#039;accès" /></div>

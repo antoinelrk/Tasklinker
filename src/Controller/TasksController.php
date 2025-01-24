@@ -24,6 +24,8 @@ class TasksController extends AbstractController
     #[Route('/tasks/show/{id}', name: 'tasks.show')]
     public function show(Task $task): Response
     {
+        $project = $task->getProject();
+
         return $this->render('tasks/show.html.twig', [
             'task' => $task,
         ]);
@@ -48,6 +50,8 @@ class TasksController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $task->setCreatedAt(new \DateTimeImmutable());
+            $entityManager->persist($task);
             $entityManager->flush();
 
             $this->addFlash('success', 'La tâche a bien été ajoutée !');
