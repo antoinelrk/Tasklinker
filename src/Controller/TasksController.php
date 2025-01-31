@@ -67,13 +67,29 @@ class TasksController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $task->setCreatedAt(new \DateTimeImmutable());
-            $entityManager->persist($task);
-            $entityManager->flush();
+            $entityManager->getConnection()->beginTransaction();
 
-            $this->addFlash('success', 'La tâche a bien été ajoutée !');
+            try {
+                // Attach user to project
+                if (!$project->getUsers()->contains($task->getUser())) {
+                    $project->addUser($task->getUser());
+                    $entityManager->persist($project);
+                }
 
-            return $this->redirectToRoute('projects.show', ['id' => $project->getId()]);
+                // Add task
+                $task->setCreatedAt(new \DateTimeImmutable());
+                $entityManager->persist($task);
+
+                // Push in database
+                $entityManager->flush();
+                $entityManager->getConnection()->commit();
+
+                $this->addFlash('success', 'La tâche a bien été ajoutée !');
+                return $this->redirectToRoute('projects.show', ['id' => $project->getId()]);
+            } catch (\Exception $e) {
+                $entityManager->getConnection()->rollback();
+                throw $e;
+            }
         }
 
         return $this->render('tasks/create.html.twig', [
