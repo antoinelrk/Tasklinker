@@ -40,7 +40,7 @@ class Project extends Entity
     /**
      * @var Collection<int, User>
      */
-    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'project', fetch: 'EAGER')]
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'projects', fetch: 'EAGER')]
     private Collection $users;
 
     /**
@@ -48,6 +48,9 @@ class Project extends Entity
      */
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'project', cascade: ['remove'], fetch: 'EAGER', orphanRemoval: true)]
     private Collection $tasks;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $deleted_at = null;
 
     public function __construct()
     {
@@ -198,6 +201,18 @@ class Project extends Entity
                 $task->setProject(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDeletedAt(): ?\DateTimeImmutable
+    {
+        return $this->deleted_at;
+    }
+
+    public function setDeletedAt(?\DateTimeImmutable $deleted_at): static
+    {
+        $this->deleted_at = $deleted_at;
 
         return $this;
     }

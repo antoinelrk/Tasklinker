@@ -2,20 +2,21 @@
 
 namespace App\Service;
 
-use App\Entity\Project;
+use App\Entity\User;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
-readonly class ProjectService
+readonly class UserService
 {
     public function __construct(
         protected EntityManagerInterface $entityManager
     ) {}
 
-    public function delete(Project $project): bool
+    public function delete(User $user): bool
     {
-        $this->entityManager->remove($project);
+        $this->entityManager->remove($user);
         $this->entityManager->flush();
 
-        return true;
+        return false;
     }
 }

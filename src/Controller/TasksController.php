@@ -23,8 +23,9 @@ class TasksController extends AbstractController
         protected TaskService $taskService = new TaskService(),
     ) {}
 
-    #[Route('/tasks/show/{task}', name: 'tasks.show')]
+    #[Route('/projects/{project}/tasks/show/{task}', name: 'tasks.show')]
     public function show(
+        Project $project,
         Task $task,
         Request $request,
         EntityManagerInterface $entityManager
@@ -34,8 +35,30 @@ class TasksController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($task);
-            $entityManager->flush();
+            try {
+                $entityManager->getConnection()->beginTransaction();
+
+                if ($task->getUser()) {
+                    // Attach user to project
+                    if (!$project->getUsers()->contains($task->getUser())) {
+                        $project->addUser($task->getUser());
+                        $entityManager->persist($project);
+                    }
+                }
+
+                // Add task
+                $task->setCreatedAt(new \DateTimeImmutable());
+                $entityManager->persist($task);
+
+                // Push in database
+                $entityManager->flush();
+                $entityManager->getConnection()->commit();
+
+                $entityManager->persist($task);
+                $entityManager->flush();
+            } catch (\Exception $e) {
+
+            }
 
             $this->addFlash('success', 'La tâche a bien été modifiée !');
 
@@ -70,10 +93,12 @@ class TasksController extends AbstractController
             $entityManager->getConnection()->beginTransaction();
 
             try {
-                // Attach user to project
-                if (!$project->getUsers()->contains($task->getUser())) {
-                    $project->addUser($task->getUser());
-                    $entityManager->persist($project);
+                if ($task->getUser()) {
+                    // Attach user to project
+                    if (!$project->getUsers()->contains($task->getUser())) {
+                        $project->addUser($task->getUser());
+                        $entityManager->persist($project);
+                    }
                 }
 
                 // Add task

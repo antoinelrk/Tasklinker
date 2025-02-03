@@ -34,6 +34,7 @@ class TaskType extends AbstractType
             ->add('User', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => fn($user) => $user->getFullName(),
+                'required' => false,
             ])
         ;
     }
