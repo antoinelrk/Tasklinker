@@ -65,7 +65,7 @@ class ProjectsController extends AbstractController
     public function index(ProjectRepository $projectRepository): Response
     {
         return $this->render('projects/index.html.twig', [
-            'projects' => $projectRepository->findAll(),
+            'projects' => $projectRepository->all(),
         ]);
     }
 
@@ -128,13 +128,12 @@ class ProjectsController extends AbstractController
     #[Route('/projects/delete/{project}', name: 'projects.delete')]
     public function delete(Project $project): Response
     {
-        if ($this->projectService->delete($project)) {
+        if ($this->projectService->archive($project)) {
             $this->addFlash('success', 'Projet supprimé');
 
             return $this->redirectToRoute('home');
         }
 
-        // TODO: Faire une redirection (type: back()) et ajouter un flash message
         $this->addFlash('error', 'Le projet n\'a pu être supprimé');
 
         return $this->redirectToRoute('home');

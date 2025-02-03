@@ -18,4 +18,25 @@ readonly class ProjectService
 
         return true;
     }
+
+    public function archive(Project $project): bool
+    {
+        try {
+            $this->entityManager->beginTransaction();
+
+            $project->setUpdatedAt(new \DateTimeImmutable());
+            $project->setDeletedAt(new \DateTimeImmutable());
+
+            $this->entityManager->persist($project);
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+
+            return true;
+        } catch (\Exception $e) {
+            $this->entityManager->rollback();
+
+            return false;
+        }
+    }
 }
