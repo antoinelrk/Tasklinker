@@ -11,6 +11,10 @@ readonly class ProjectService
         protected EntityManagerInterface $entityManager
     ) {}
 
+    /**
+     * @param Project $project
+     * @return bool
+     */
     public function delete(Project $project): bool
     {
         $this->entityManager->remove($project);
@@ -19,6 +23,10 @@ readonly class ProjectService
         return true;
     }
 
+    /**
+     * @param Project $project
+     * @return bool
+     */
     public function archive(Project $project): bool
     {
         try {

@@ -12,6 +12,10 @@ readonly class UserService
         protected EntityManagerInterface $entityManager
     ) {}
 
+    /**
+     * @param User $user
+     * @return bool
+     */
     public function delete(User $user): bool
     {
         $this->entityManager->remove($user);

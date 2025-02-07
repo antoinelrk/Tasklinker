@@ -11,6 +11,10 @@ readonly class TaskService
         private EntityManagerInterface $entityManager
     ) {}
 
+    /**
+     * @param Task $task
+     * @return bool
+     */
     public function delete(Task $task): bool
     {
         $this->entityManager->remove($task);
