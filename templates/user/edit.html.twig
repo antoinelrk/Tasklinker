@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!{% endblock %}
+
+{% block body %}
+<main>
+    <header>
+        <div id="current-user"></div>
+        <div id="title-page">
+            <h1>{{ user.getFullName() }}</h1>
+        </div>
+    </header>
+    <div id="content">
+        {{ form_start(form) }}
+            <div>{{ form_errors(form) }}</div>
+
+            <div>{{ form_row(form.first_name) }}</div>
+
+            <div>{{ form_row(form.name) }}</div>
+
+            <div>{{ form_row(form.email) }}</div>
+
+            <div class="form-flex">
+                <div>{{ form_row(form.employment_started_at) }}</div>
+                <div>{{ form_row(form.employment_contract) }}</div>
+            </div>
+
+            <button class="button button-submit">Enregistrer</button>
+        {{ form_end(form) }}
+    </div>
+</main>
+{% endblock %}
