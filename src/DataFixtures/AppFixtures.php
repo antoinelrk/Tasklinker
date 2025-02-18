@@ -27,21 +27,21 @@ class AppFixtures extends Fixture
                 'first_name' => 'Natalie',
                 'email' => 'natalie@driblet.com',
                 'contract' => EmploymentContractEnum::CDI->value,
-                'started_at' => '15604632',
+                'started_at' => '14-06-2019',
             ],
             [
                 'name' => 'Baker',
                 'first_name' => 'Demi',
                 'email' => 'demi@driblet.com',
                 'contract' => EmploymentContractEnum::CDD->value,
-                'started_at' => '15604632',
+                'started_at' => '21-02-2021',
             ],
             [
                 'name' => 'Dupont',
                 'first_name' => 'Marie',
                 'email' => 'marie@driblet.com',
                 'contract' => EmploymentContractEnum::FREELANCE->value,
-                'started_at' => '15604632',
+                'started_at' => '06-12-2008',
             ]
         ];
 
@@ -51,8 +51,8 @@ class AppFixtures extends Fixture
             $user->setFirstName($u['first_name']);
             $user->setEmail($u['email']);
             $user->setEnabled(true);
-            $user->setEmployementContract($u['contract']);
-            $user->setEmployementStartedAt(new \DateTimeImmutable($u['started_at']));
+            $user->setEmploymentContract($u['contract']);
+            $user->setEmploymentStartedAt(\DateTimeImmutable::createFromFormat('d-m-Y', $u['started_at']));
             $user->setCreatedAt(new \DateTimeImmutable('now'));
 
             $this->flush($manager, $user);

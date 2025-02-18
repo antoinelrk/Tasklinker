@@ -11,22 +11,40 @@ readonly class ProjectService
         protected EntityManagerInterface $entityManager
     ) {}
 
+    /**
+     * @param Project $project
+     * @return bool
+     */
     public function delete(Project $project): bool
     {
-        // TODO: Faire les vérifications
         $this->entityManager->remove($project);
         $this->entityManager->flush();
 
         return true;
     }
 
-//    public function create(Project $project): bool|Project
-//    {
-//
-//    }
-//
-//    public function update(Project $project)
-//    {
-//
-//    }
+    /**
+     * @param Project $project
+     * @return bool
+     */
+    public function archive(Project $project): bool
+    {
+        try {
+            $this->entityManager->beginTransaction();
+
+            $project->setUpdatedAt(new \DateTimeImmutable());
+            $project->setDeletedAt(new \DateTimeImmutable());
+
+            $this->entityManager->persist($project);
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+
+            return true;
+        } catch (\Exception $e) {
+            $this->entityManager->rollback();
+
+            return false;
+        }
+    }
 }

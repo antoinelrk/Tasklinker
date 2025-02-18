@@ -31,7 +31,7 @@ class User extends Entity
     private ?bool $enabled = null;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $employement_started_at = null;
+    private ?\DateTimeImmutable $employment_started_at = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
@@ -40,23 +40,24 @@ class User extends Entity
     private ?\DateTimeImmutable $updated_at = null;
 
     #[ORM\Column(length: 64)]
-    private ?string $employement_contract = null;
+    private ?string $employment_contract = null;
 
     /**
      * @var Collection<int, Project>
      */
     #[ORM\ManyToMany(targetEntity: Project::class, inversedBy: 'users', cascade: ['persist'])]
-    private Collection $project;
+    private Collection $projects;
 
     /**
      * @var Collection<int, Task>
      */
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'User')]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private Collection $tasks;
 
     public function __construct()
     {
-        $this->project = new ArrayCollection();
+        $this->projects = new ArrayCollection();
         $this->tasks = new ArrayCollection();
     }
 
@@ -125,14 +126,14 @@ class User extends Entity
         return $this;
     }
 
-    public function getEmployementStartedAt(): ?\DateTimeImmutable
+    public function getEmploymentStartedAt(): ?\DateTimeImmutable
     {
-        return $this->employement_started_at;
+        return $this->employment_started_at;
     }
 
-    public function setEmployementStartedAt(?\DateTimeImmutable $employement_started_at): static
+    public function setEmploymentStartedAt(?\DateTimeImmutable $employment_started_at): static
     {
-        $this->employement_started_at = $employement_started_at;
+        $this->employment_started_at = $employment_started_at;
 
         return $this;
     }
@@ -161,36 +162,30 @@ class User extends Entity
         return $this;
     }
 
-    public function getEmployementContract(): ?string
+    public function getEmploymentContract(): ?string
     {
-        return $this->employement_contract;
+        return $this->employment_contract;
     }
 
-    public function setEmployementContract(string $employement_contract): static
+    public function setEmploymentContract(string $employment_contract): static
     {
-        $this->employement_contract = $employement_contract;
+        $this->employment_contract = $employment_contract;
 
         return $this;
-    }
-
-    // ---------- HELPERS ----------
-    public function getInitials(): string
-    {
-        return strtoupper($this->getFirstName()[0] . $this->getName()[0]);
     }
 
     /**
      * @return Collection<int, Project>
      */
-    public function getProject(): Collection
+    public function getProjects(): Collection
     {
-        return $this->project;
+        return $this->projects;
     }
 
     public function addProject(Project $project): static
     {
-        if (!$this->project->contains($project)) {
-            $this->project->add($project);
+        if (!$this->projects->contains($project)) {
+            $this->projects->add($project);
         }
 
         return $this;
@@ -198,7 +193,7 @@ class User extends Entity
 
     public function removeProject(Project $project): static
     {
-        $this->project->removeElement($project);
+        $this->projects->removeElement($project);
 
         return $this;
     }
@@ -231,6 +226,12 @@ class User extends Entity
         }
 
         return $this;
+    }
+
+    // ---------- HELPERS ----------
+    public function getInitials(): string
+    {
+        return strtoupper($this->getFirstName()[0] . $this->getName()[0]);
     }
 
     public function getFullName(): string
