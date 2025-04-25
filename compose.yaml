@@ -1,0 +1,35 @@
+services:
+  tl_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tl_app
+    working_dir: /var/www/symfony
+    volumes:
+      - ./:/var/www/symfony
+    ports:
+      - "8000:8000"
+    depends_on:
+      - tl_database
+    networks:
+      - tasklinker_lan
+
+  tl_database:
+    image: mariadb:11.7.2
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    container_name: tl_database
+    restart: always
+    volumes:
+      - ./tasklinker-database:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=local
+      - MYSQL_PASSWORD=local
+      - MYSQL_DATABASE=tasklinker
+      - MYSQL_USER=tasklinker
+    networks:
+      - tasklinker_lan
+
+networks:
+  tasklinker_lan:
+    name: tasklinker_lan
+    external: true
