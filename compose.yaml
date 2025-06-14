@@ -19,6 +19,8 @@ services:
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
     container_name: tl_database
     restart: always
+    ports:
+      - "3377:3306"
     volumes:
       - ./tasklinker-database:/var/lib/mysql
     environment:
