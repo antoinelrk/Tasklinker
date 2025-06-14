@@ -1,6 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap');
 
 :root {
+    --water-green: #4D8077;
+    --dark-green: #1C5B50;
+    --almond-green: #B1D89D;
+    --other-green: #E5F6DC;
+
     --color-green-50: oklch(0.982 0.018 155.826);
     --color-green-100: oklch(0.962 0.044 156.743);
     --color-green-200: oklch(0.925 0.084 155.995);
@@ -63,6 +68,10 @@ html, body {
 
 ul li {
     list-style-type: none;
+}
+
+.background-darkgreen {
+    background-color: var(--dark-green);
 }
 
 ul.flashes {
@@ -201,7 +210,7 @@ ul#main-menu i {
 }
 
 header {
-    background: #4D8077;
+    background: var(--water-green);
     height: 155px;
     padding: 30px 80px 10px 80px;
 }
@@ -287,7 +296,7 @@ div#projects-container {
 }
 
 .card-project-icons i.fa-pen {
-    color: #4D8077;
+    color: var(--water-green);
 }
 
 .add-project-icon {
@@ -327,7 +336,7 @@ div#projects-container {
     height: 54px;
     display: flex;
     align-items: center;
-    color: #4D8077;
+    color: var(--water-green);
     font-family: Manrope, sans-serif;
     font-size: 14px;
     font-weight: 700;
@@ -587,7 +596,7 @@ a.delete-task {
 }
 
 form .select2-container--default .select2-selection--multiple .select2-selection__choice {
-    background-color: #4D8077;
+    background-color: var(--water-green);
     border-radius: 30px;
     color: #fff;
     font-size: 12px;
