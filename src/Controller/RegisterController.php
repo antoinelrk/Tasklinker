@@ -44,7 +44,7 @@ class RegisterController extends AbstractController
             return $this->redirectToRoute('projects');
         }
 
-        return $this->render('register/index.html.twig', [
+        return $this->render('auth/register.html.twig', [
             'form' => $form,
         ]);
     }
