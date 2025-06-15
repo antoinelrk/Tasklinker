@@ -2,17 +2,50 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Enum\EmploymentContractEnum;
+use App\Form\RegistrationFormType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 class RegisterController extends AbstractController
 {
+    public function __construct(
+        private readonly EntityManagerInterface $entityManager,
+    ) {}
+
     #[Route('/register', name: 'app_register')]
-    public function index(): Response
+    public function index(Request $request, UserPasswordHasherInterface $hasher): Response
     {
+        $user = new User();
+        $user
+            ->setEmploymentContract('CDI')
+            ->setEmploymentStartedAt(new \DateTimeImmutable());
+
+        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword($hasher->hashPassword($user, $user->getPassword()));
+
+            // TODO: Forcer les elements de la table qui sont non-null
+            $user->setEnabled(true);
+            $user->setEmploymentContract(EmploymentContractEnum::CDI->value);
+            $user->setRoles(['ROLE_USER']);
+            $user->setCreatedAt(new \DateTimeImmutable());
+            $user->setUpdatedAt(new \DateTimeImmutable());
+
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
+            return $this->redirectToRoute('projects');
+        }
+
         return $this->render('register/index.html.twig', [
-            'controller_name' => 'RegisterController',
+            'form' => $form,
         ]);
     }
 }
