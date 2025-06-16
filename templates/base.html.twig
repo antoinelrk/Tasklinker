@@ -32,11 +32,18 @@
                             <i class="fa-solid fa-list-check"></i> Projets
                         </a>
                     </li>
+                    {% if app.user.isAdmin %}
                     <li class="{% if app.request.attributes.get('_route') == 'teams' %}active{% endif %}">
                         <a href="/teams">
                             <i class="fa-regular fa-user"></i> Équipe
                         </a>
                     </li>
+                    {% endif %}
+                    {% if app.user %}
+                    <li>
+                        <a href="{{ path('app_logout') }}">Se déconnecter</a>
+                    </li>
+                    {% endif %}
                 </ul>
             </nav>
 

@@ -296,4 +296,9 @@ class User extends Entity implements UserInterface, PasswordAuthenticatedUserInt
     {
         return $this->getFirstName() . ' ' . $this->getName();
     }
+
+    public function isAdmin(): bool
+    {
+        return in_array('ROLE_ADMIN', $this->roles);
+    }
 }
