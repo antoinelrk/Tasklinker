@@ -26,6 +26,7 @@ class AppFixtures extends Fixture
                 'name' => 'Dillon',
                 'first_name' => 'Natalie',
                 'email' => 'natalie@driblet.com',
+                'password' => 'plain-password',
                 'contract' => EmploymentContractEnum::CDI->value,
                 'started_at' => '14-06-2019',
             ],
@@ -33,6 +34,7 @@ class AppFixtures extends Fixture
                 'name' => 'Baker',
                 'first_name' => 'Demi',
                 'email' => 'demi@driblet.com',
+                'password' => 'plain-password',
                 'contract' => EmploymentContractEnum::CDD->value,
                 'started_at' => '21-02-2021',
             ],
@@ -40,6 +42,7 @@ class AppFixtures extends Fixture
                 'name' => 'Dupont',
                 'first_name' => 'Marie',
                 'email' => 'marie@driblet.com',
+                'password' => 'plain-password',
                 'contract' => EmploymentContractEnum::FREELANCE->value,
                 'started_at' => '06-12-2008',
             ]
@@ -50,6 +53,7 @@ class AppFixtures extends Fixture
             $user->setName($u['name']);
             $user->setFirstName($u['first_name']);
             $user->setEmail($u['email']);
+            $user->setPassword($u['password']);
             $user->setEnabled(true);
             $user->setEmploymentContract($u['contract']);
             $user->setEmploymentStartedAt(\DateTimeImmutable::createFromFormat('d-m-Y', $u['started_at']));
