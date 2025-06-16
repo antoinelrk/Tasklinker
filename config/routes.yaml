@@ -1,9 +1,9 @@
-home:
-    path: /
-    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController
-    defaults:
-        route: projects
-        permanent: true
+#home:
+#    path: /
+#    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController
+#    defaults:
+#        route: projects
+#        permanent: true
 
 controllers:
     resource:
