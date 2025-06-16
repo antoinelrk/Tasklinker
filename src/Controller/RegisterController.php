@@ -21,6 +21,10 @@ class RegisterController extends AbstractController
     #[Route('/register', name: 'app_register')]
     public function index(Request $request, UserPasswordHasherInterface $hasher): Response
     {
+        if ($this->getUser()) {
+            return $this->redirectToRoute('projects');
+        }
+
         $user = new User();
         $user
             ->setEmploymentContract('CDI')
@@ -32,7 +36,6 @@ class RegisterController extends AbstractController
         if($form->isSubmitted() && $form->isValid()) {
             $user->setPassword($hasher->hashPassword($user, $user->getPassword()));
 
-            // TODO: Forcer les elements de la table qui sont non-null
             $user->setEnabled(true);
             $user->setEmploymentContract(EmploymentContractEnum::CDI->value);
             $user->setRoles(['ROLE_USER']);
@@ -41,7 +44,8 @@ class RegisterController extends AbstractController
 
             $this->entityManager->persist($user);
             $this->entityManager->flush();
-            return $this->redirectToRoute('projects');
+
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('auth/register.html.twig', [
