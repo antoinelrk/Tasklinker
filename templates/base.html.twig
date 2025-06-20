@@ -27,21 +27,23 @@
                     <img src="{{ asset('img/logo.png') }}" alt="Logo TaskLinker" />
                 </a>
                 <ul id="main-menu">
-                    <li class="{% if app.request.attributes.get('_route') == 'projects' %}active{% endif %}">
-                        <a href="/projects">
-                            <i class="fa-solid fa-list-check"></i> Projets
-                        </a>
-                    </li>
-                    {% if app.user.isAdmin %}
-                    <li class="{% if app.request.attributes.get('_route') == 'teams' %}active{% endif %}">
-                        <a href="/teams">
-                            <i class="fa-regular fa-user"></i> Équipe
-                        </a>
-                    </li>
-                    {% endif %}
                     {% if app.user %}
+                        <li class="{% if app.request.attributes.get('_route') == 'projects' %}active{% endif %}">
+                            <a href="{{ path('projects') }}">
+                                <i class="fa-solid fa-list-check"></i> Projets
+                            </a>
+                        </li>
+                        {% if app.user.isAdmin %}
+                            <li class="{% if app.request.attributes.get('_route') == 'teams' %}active{% endif %}">
+                                <a href="{{ path('teams') }}">
+                                    <i class="fa-regular fa-user"></i> Équipe
+                                </a>
+                            </li>
+                        {% endif %}
                     <li>
-                        <a href="{{ path('app_logout') }}">Se déconnecter</a>
+                        <a href="{{ path('app_logout') }}">
+                            <i class="fa-solid fa-right-from-bracket"></i> Se déconnecter
+                        </a>
                     </li>
                     {% endif %}
                 </ul>

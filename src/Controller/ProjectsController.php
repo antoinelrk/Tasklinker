@@ -64,7 +64,9 @@ class ProjectsController extends AbstractController
     #[Route('/projects', name: 'projects')]
     public function index(ProjectRepository $projectRepository): Response
     {
-        $projects = $projectRepository->current();
+        $projects = $this->isGranted('ROLE_ADMIN') ?
+            $projectRepository->findAll() :
+            $projectRepository->current();
 
         return $this->render('projects/index.html.twig', [
             'projects' => $projects,
@@ -81,9 +83,15 @@ class ProjectsController extends AbstractController
     #[Route('/projects/show/{id}', name: 'projects.show')]
     public function show(Project $project): Response
     {
-        return $this->render('projects/show.html.twig', [
-            'project' => $project,
-        ]);
+        // TODO: Si l'utilisateur est admin on passe
+        //  Si l'utilisateur est pas admin mais qu'il fait parti du projet on passe
+        //  Sinon on retourne sur la liste des projets
+        if ($this->isGranted('ROLE_ADMIN')) {
+            return $this->render('projects/show.html.twig', [
+                'project' => $project,
+            ]);
+        }
+
     }
 
     /**
@@ -102,6 +110,8 @@ class ProjectsController extends AbstractController
         EntityManagerInterface $entityManager,
     ): Response
     {
+        // TODO: On vérifie que l'utilisateur est admin, si c'est le cas on passe.
+        //  Sinon, on retourne au projet
         $form = $this->createForm(ProjectType::class, $project);
 
         $form->handleRequest($request);
