@@ -16,12 +16,14 @@
                     {% endfor %}
                 </div>
 
+                {% if app.user.isAdmin %}
                 <a
                     class="button"
                     href="{{ url('projects.edit', { project: project.id }) }}"
                 >
                     Modifier
                 </a>
+                {% endif %}
             </div>
         </div>
     </header>

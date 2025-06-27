@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ProjectsController extends AbstractController
 {
@@ -83,15 +84,21 @@ class ProjectsController extends AbstractController
     #[Route('/projects/show/{id}', name: 'projects.show')]
     public function show(Project $project): Response
     {
-        // TODO: Si l'utilisateur est admin on passe
-        //  Si l'utilisateur est pas admin mais qu'il fait parti du projet on passe
-        //  Sinon on retourne sur la liste des projets
+        // Check if the user is an admin
         if ($this->isGranted('ROLE_ADMIN')) {
             return $this->render('projects/show.html.twig', [
                 'project' => $project,
             ]);
         }
 
+        // If the user is not an admin, check if they are part of the project
+        if ($this->isGranted('ROLE_USER') && $project->getUsers()->contains($this->getUser())) {
+            return $this->render('projects/show.html.twig', [
+                'project' => $project,
+            ]);
+        }
+
+        return $this->redirect('projects');
     }
 
     /**
@@ -104,14 +111,13 @@ class ProjectsController extends AbstractController
      * @return Response
      */
     #[Route('/projects/edit/{project}', name: 'projects.edit')]
+    #[isGranted('ROLE_ADMIN')]
     public function edit(
         Request $request,
         Project $project,
         EntityManagerInterface $entityManager,
     ): Response
     {
-        // TODO: On vérifie que l'utilisateur est admin, si c'est le cas on passe.
-        //  Sinon, on retourne au projet
         $form = $this->createForm(ProjectType::class, $project);
 
         $form->handleRequest($request);
@@ -138,6 +144,7 @@ class ProjectsController extends AbstractController
      * @return Response
      */
     #[Route('/projects/delete/{project}', name: 'projects.delete')]
+    #[isGranted('ROLE_ADMIN')]
     public function delete(Project $project): Response
     {
         if ($this->projectService->archive($project)) {
