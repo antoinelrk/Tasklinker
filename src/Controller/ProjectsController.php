@@ -98,7 +98,7 @@ class ProjectsController extends AbstractController
             ]);
         }
 
-        return $this->redirect('projects');
+        return $this->redirectToRoute('projects');
     }
 
     /**
