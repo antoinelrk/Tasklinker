@@ -301,4 +301,9 @@ class User extends Entity implements UserInterface, PasswordAuthenticatedUserInt
     {
         return in_array('ROLE_ADMIN', $this->roles);
     }
+
+    public function hasRole(string $role): bool
+    {
+        return in_array($role, $this->roles);
+    }
 }

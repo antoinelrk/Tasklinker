@@ -7,12 +7,14 @@ use App\Entity\Task;
 use App\Enum\TaskStateEnum;
 use App\Form\TaskType;
 use App\Repository\UserRepository;
+use App\Security\Voter\TaskVoter;
 use App\Service\TaskService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class TasksController extends AbstractController
 {
@@ -24,6 +26,7 @@ class TasksController extends AbstractController
     ) {}
 
     #[Route('/projects/{project}/tasks/show/{task}', name: 'tasks.show')]
+    #[isGranted(TaskVoter::VIEW, subject: 'task')]
     public function show(
         Project $project,
         Task $task,
