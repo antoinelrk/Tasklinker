@@ -6,16 +6,16 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-final class TaskVoter extends Voter {
-    public const EDIT = 'TASK_EDIT';
-    public const VIEW = 'TASK_VIEW';
+final class ProjectVoter extends Voter {
+    public const VIEW = 'PROJECT_VIEW';
+    public const DELETE = 'PROJECT_DELETE';
 
     protected function supports(string $attribute, mixed $subject): bool
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [self::EDIT, self::VIEW])
-            && $subject instanceof \App\Entity\Task;
+        return in_array($attribute, [self::VIEW, self::DELETE])
+            && $subject instanceof \App\Entity\Project;
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
@@ -33,7 +33,8 @@ final class TaskVoter extends Voter {
 
         // ... (check conditions and return true to grant permission) ...
         return match ($attribute) {
-            self::VIEW => $subject->getProject()->getUsers()->contains($user),
+            self::VIEW => $user->getProjects()->contains($subject),
+            self::DELETE => $user->hasRole('ROLE_ADMIN'),
             default => false,
         };
 
