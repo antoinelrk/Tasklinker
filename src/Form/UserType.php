@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use App\Enum\EmploymentContractEnum;
+use Doctrine\DBAL\Types\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -19,7 +20,16 @@ class UserType extends AbstractType
             ->add('first_name')
             ->add('email')
             ->add('employment_started_at', DateType::class, [
-                'widget' => 'single_text'
+                'widget' => 'single_text',
+            ])
+            ->add('roles', ChoiceType::class)
+            ->add('roles', ChoiceType::class, [
+                'label' => 'Rôle',
+                'choices' => [
+                    'Collaborateur' => 'ROLE_USER',
+                    'Chef de projet' => 'ROLE_ADMIN',
+                ],
+                'multiple' => true,
             ])
             ->add('employment_contract', ChoiceType::class, [
                 'choices' => [

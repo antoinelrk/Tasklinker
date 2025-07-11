@@ -140,6 +140,13 @@ class Task
         return $this;
     }
 
+    public function removeUser(): static
+    {
+        $this->User = null;
+
+        return $this;
+    }
+
     public function getUserInitials(): string
     {
         return $this->User->getInitials();
