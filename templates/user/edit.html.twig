@@ -20,12 +20,14 @@
 
             <div>{{ form_row(form.email) }}</div>
 
+            <div>{{ form_row(form.roles) }}</div>
+
             <div class="form-flex">
                 <div>{{ form_row(form.employment_started_at) }}</div>
                 <div>{{ form_row(form.employment_contract) }}</div>
             </div>
 
-            <button class="button button-submit">Enregistrer</button>
+            <button type="submit" class="button button-submit">Enregistrer</button>
         {{ form_end(form) }}
     </div>
 </main>

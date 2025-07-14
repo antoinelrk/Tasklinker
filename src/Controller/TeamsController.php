@@ -10,6 +10,12 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class TeamsController extends AbstractController
 {
+    /**
+     * TeamsController constructor.
+     *
+     * @param UserRepository $userRepository
+     * @return Response
+     */
     #[Route('/teams', name: 'teams')]
     #[isGranted('ROLE_ADMIN')]
     public function index(UserRepository $userRepository): Response

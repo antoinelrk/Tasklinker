@@ -15,6 +15,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TaskType extends AbstractType
 {
+    /**
+     * Build the form for creating or editing a task.
+     *
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder

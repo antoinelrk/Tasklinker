@@ -16,6 +16,11 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ProjectsController extends AbstractController
 {
+    /**
+     * ProjectsController constructor.
+     *
+     * @param ProjectService $projectService
+     */
     public function __construct(
         private readonly ProjectService $projectService = new ProjectService(),
     ) {}
