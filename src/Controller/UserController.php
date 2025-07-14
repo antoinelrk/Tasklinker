@@ -22,6 +22,11 @@ class UserController extends AbstractController
     {}
 
     /**
+     * Create a new user.
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
      * @throws Exception
      */
     #[Route('/users/edit/{id}', name: 'users.edit')]
@@ -68,6 +73,12 @@ class UserController extends AbstractController
         ]);
     }
 
+    /**
+     * Delete a user.
+     *
+     * @param User $user
+     * @return Response
+     */
     #[Route('/users/delete/{id}', name: 'users.delete')]
     #[isGranted('ROLE_ADMIN')]
     public function delete(
