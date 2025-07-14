@@ -11,12 +11,14 @@ use App\Repository\ProjectRepository;
 use App\Repository\UserRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
     public function __construct(
         protected ProjectRepository $projectRepository,
         protected UserRepository $userRepository,
+        protected UserPasswordHasherInterface $passwordHasher
     ) {}
 
     private function users(ObjectManager $manager): void
@@ -53,7 +55,7 @@ class AppFixtures extends Fixture
             $user->setName($u['name']);
             $user->setFirstName($u['first_name']);
             $user->setEmail($u['email']);
-            $user->setPassword($u['password']);
+            $user->setPassword($this->passwordHasher->hashPassword($user, $u['password']));
             $user->setEnabled(true);
             $user->setEmploymentContract($u['contract']);
             $user->setEmploymentStartedAt(\DateTimeImmutable::createFromFormat('d-m-Y', $u['started_at']));

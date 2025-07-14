@@ -6,18 +6,34 @@ use App\Entity\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * @extends ServiceEntityRepository<Project>
  */
 class ProjectRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    protected Security $security;
+
+    public function __construct(ManagerRegistry $registry, Security $security)
     {
         parent::__construct($registry, Project::class);
+
+        $this->security = $security;
     }
 
     // ---------- HELPERS ----------
+
+    public function current(): ?array
+    {
+        $projects = $this->security->getUser()?->getProjects();
+
+        if (!$projects) {
+            return null;
+        }
+
+        return $projects->toArray();
+    }
 
     public function first(): ?Project
     {

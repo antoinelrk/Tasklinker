@@ -18,6 +18,13 @@ class RegisterController extends AbstractController
         private readonly EntityManagerInterface $entityManager,
     ) {}
 
+    /**
+     * Displays the registration page.
+     *
+     * @param Request $request
+     * @param UserPasswordHasherInterface $hasher
+     * @return Response
+     */
     #[Route('/register', name: 'app_register')]
     public function index(Request $request, UserPasswordHasherInterface $hasher): Response
     {

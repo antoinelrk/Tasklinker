@@ -12,9 +12,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ProjectsController extends AbstractController
 {
+    /**
+     * ProjectsController constructor.
+     *
+     * @param ProjectService $projectService
+     */
     public function __construct(
         private readonly ProjectService $projectService = new ProjectService(),
     ) {}
@@ -64,8 +70,12 @@ class ProjectsController extends AbstractController
     #[Route('/projects', name: 'projects')]
     public function index(ProjectRepository $projectRepository): Response
     {
+        $projects = $this->isGranted('ROLE_ADMIN') ?
+            $projectRepository->findAll() :
+            $projectRepository->current();
+
         return $this->render('projects/index.html.twig', [
-            'projects' => $projectRepository->all(),
+            'projects' => $projects,
         ]);
     }
 
@@ -79,9 +89,21 @@ class ProjectsController extends AbstractController
     #[Route('/projects/show/{id}', name: 'projects.show')]
     public function show(Project $project): Response
     {
-        return $this->render('projects/show.html.twig', [
-            'project' => $project,
-        ]);
+        // Check if the user is an admin
+        if ($this->isGranted('ROLE_ADMIN')) {
+            return $this->render('projects/show.html.twig', [
+                'project' => $project,
+            ]);
+        }
+
+        // If the user is not an admin, check if they are part of the project
+        if ($this->isGranted('ROLE_USER') && $project->getUsers()->contains($this->getUser())) {
+            return $this->render('projects/show.html.twig', [
+                'project' => $project,
+            ]);
+        }
+
+        return $this->redirectToRoute('projects');
     }
 
     /**
@@ -94,6 +116,7 @@ class ProjectsController extends AbstractController
      * @return Response
      */
     #[Route('/projects/edit/{project}', name: 'projects.edit')]
+    #[isGranted('ROLE_ADMIN')]
     public function edit(
         Request $request,
         Project $project,
@@ -126,6 +149,7 @@ class ProjectsController extends AbstractController
      * @return Response
      */
     #[Route('/projects/delete/{project}', name: 'projects.delete')]
+    #[isGranted('ROLE_ADMIN')]
     public function delete(Project $project): Response
     {
         if ($this->projectService->archive($project)) {

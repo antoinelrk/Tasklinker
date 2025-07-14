@@ -20,7 +20,9 @@
             <div>{{ form_row(form.likely_end_at) }}</div>
             <div>{{ form_row(form.User) }}</div>
             <button type="submit" class="button button-submit">Continuer</button>
-            <a href="{{ url('task.delete', { task: task.getId() }) }}" class="delete-task">Supprimer la tâche</a>
+            {% if app.user.isAdmin %}
+                <a href="{{ url('task.delete', { task: task.getId() }) }}" class="delete-task">Supprimer la tâche</a>
+            {% endif %}
         {{ form_end(form) }}
     </div>
 </main>

@@ -7,23 +7,46 @@ use App\Entity\Task;
 use App\Enum\TaskStateEnum;
 use App\Form\TaskType;
 use App\Repository\UserRepository;
+use App\Security\Voter\TaskVoter;
 use App\Service\TaskService;
+use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class TasksController extends AbstractController
 {
+    /**
+     * Default state for new tasks.
+     * This can be overridden by the 'state' query parameter.
+     */
     private const DEFAULT_STATE = TaskStateEnum::TODO->value;
 
+    /**
+     * TasksController constructor.
+     *
+     * @param UserRepository $userRepository
+     * @param TaskService $taskService
+     */
     public function __construct(
         protected UserRepository $userRepository = new UserRepository(),
         protected TaskService $taskService = new TaskService(),
     ) {}
 
+    /**
+     * Show task details and allow editing.
+     *
+     * @param Project $project
+     * @param Task $task
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/projects/{project}/tasks/show/{task}', name: 'tasks.show')]
+    #[isGranted(TaskVoter::VIEW, subject: 'task')]
     public function show(
         Project $project,
         Task $task,
@@ -57,7 +80,10 @@ class TasksController extends AbstractController
                 $entityManager->persist($task);
                 $entityManager->flush();
             } catch (\Exception $e) {
+                $entityManager->getConnection()->rollback();
+                $this->addFlash('error', 'Une erreur est survenue lors de la modification de la tâche.');
 
+                return $this->redirectToRoute('tasks.show', ['project' => $project->getId(), 'task' => $task->getId()]);
             }
 
             $this->addFlash('success', 'La tâche a bien été modifiée !');
@@ -71,6 +97,15 @@ class TasksController extends AbstractController
         ]);
     }
 
+    /**
+     * Create a new task for a project.
+     *
+     * @param Project $project
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     * @throws Exception
+     */
     #[Route('/projects/{project}/tasks/create', name: 'tasks.create')]
     public function create(
         Project $project,
@@ -94,18 +129,14 @@ class TasksController extends AbstractController
 
             try {
                 if ($task->getUser()) {
-                    // Attach user to project
                     if (!$project->getUsers()->contains($task->getUser())) {
                         $project->addUser($task->getUser());
                         $entityManager->persist($project);
                     }
                 }
 
-                // Add task
                 $task->setCreatedAt(new \DateTimeImmutable());
                 $entityManager->persist($task);
-
-                // Push in database
                 $entityManager->flush();
                 $entityManager->getConnection()->commit();
 
@@ -125,6 +156,12 @@ class TasksController extends AbstractController
         ]);
     }
 
+    /**
+     * Delete a task.
+     *
+     * @param Task $task
+     * @return Response
+     */
     #[Route('/tasks/delete/{task}', name: 'task.delete')]
     public function delete(
         Task $task
