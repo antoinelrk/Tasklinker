@@ -2,6 +2,8 @@
 
 ## Prérequis
 
+Configurer les variables d'environnement dans le fichier `.env` à la racine du projet. Vous pouvez vous inspirer du fichier `.env.example`.
+
 Créer le réseau local `tasklinker_lan` via la commande suivante :
 
 ```bash
