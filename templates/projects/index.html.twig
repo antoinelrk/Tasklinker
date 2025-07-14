@@ -30,12 +30,14 @@
                     </article>
                 {% endfor %}
 
+                {% if app.user.isAdmin %}
                 <article class="card-project">
                     <a href="{{ url('projects.create') }}">
                         <i class="fa-solid fa-circle-plus add-project-icon"></i>
                         <h2>Ajouter un projet</h2>
                     </a>
                 </article>
+                {% endif %}
             </div>
         </div>
     </main>

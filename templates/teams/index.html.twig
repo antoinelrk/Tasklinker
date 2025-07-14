@@ -16,6 +16,7 @@
             <tr>
                 <th>Prénom, Nom</th>
                 <th>Statut</th>
+                <th>Rôle</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -34,6 +35,7 @@
                         </div>
                     </td>
                     <td>{{ user.getEmploymentContract() }}</td>
+                    <td>{% if 'ROLE_ADMIN' in user.roles %}Chef de projet{% else %}Collaborateur{% endif %}</td>
                     <td>
                         <a class="button button-edit-team" href="{{ url('users.edit', { id: user.id }) }}">
                             Éditer
